@@ -17,6 +17,11 @@ function MainAppBar() {
       justifyContent="space-between"
       px="10px"
       boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"
+      position="fixed"
+      top={0}
+      width="100%"
+      zIndex={20}
+      bgcolor="white"
     >
       <Box
         display="flex"
