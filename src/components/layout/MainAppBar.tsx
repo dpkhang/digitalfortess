@@ -5,6 +5,7 @@ import * as React from "react";
 import SwitchMode from "./SwitchMode";
 import LocaleSwitcher from "./LocaleSwitcher";
 import { Link } from "@/config/navigation";
+import { signOut } from "next-auth/react";
 
 MainAppBar.maxHeight = 70;
 
@@ -24,6 +25,12 @@ function MainAppBar() {
       >
         <Link href={"/dashboard"}>Projects</Link>
         <Link href={"/"}>User</Link>
+        <Box
+          onClick={() => signOut()}
+          sx={{ cursor: "pointer" }}
+        >
+          Logout
+        </Box>
       </Box>
       <Box
         display="flex"

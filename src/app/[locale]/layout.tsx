@@ -32,9 +32,7 @@ export default function RootLayout({ children, params: { locale } }: RootLayoutP
           locale={locale}
           messages={messages}
         >
-          <AppProviders lng={locale}>
-            <MainLayout>{children}</MainLayout>
-          </AppProviders>
+          <AppProviders lng={locale}>{children}</AppProviders>
         </NextIntlClientProvider>
       </body>
     </html>
