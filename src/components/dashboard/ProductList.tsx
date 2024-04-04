@@ -20,7 +20,9 @@ const ProductList = () => {
       data?.results.map((d) => ({
         id: d.id,
         project_domain: d.project_domain,
-        last_accessed: d.last_accessed,
+        last_accessed: d.last_accessed
+          ? new Date(d.last_accessed).toLocaleDateString()
+          : "",
       })) || [];
     setRows(newRows || []);
   }, [data]);
