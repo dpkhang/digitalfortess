@@ -1,4 +1,3 @@
-import MainLayout from "@/components/layout/MainLayout";
 import AppProviders from "@/providers";
 import { Roboto } from "next/font/google";
 import { getTranslations } from "next-intl/server";
