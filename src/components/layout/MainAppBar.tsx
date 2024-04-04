@@ -23,8 +23,18 @@ function MainAppBar() {
         gap={4}
         alignItems="center"
       >
-        <Link href={"/dashboard"}>Projects</Link>
-        <Link href={"/"}>User</Link>
+        <Link
+          href={"/dashboard"}
+          style={{ color: "black", textDecoration: "none" }}
+        >
+          Projects
+        </Link>
+        <Link
+          href={"/"}
+          style={{ color: "black", textDecoration: "none" }}
+        >
+          User
+        </Link>
         <Box
           onClick={() => signOut()}
           sx={{ cursor: "pointer" }}
