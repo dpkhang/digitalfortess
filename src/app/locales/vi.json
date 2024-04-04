@@ -1,0 +1,14 @@
+{
+  "LoginForm": {
+    "login": "Đăng nhập",
+    "password": "Mật khẩu",
+    "enter_pass": "Nhập mật khẩu",
+    "enter_email": "Nhập mật email"
+  },
+  "HomePage": {
+    "title": ""
+  },
+  "LocaleSwitcher": {
+    "locale": "vi"
+  }
+}

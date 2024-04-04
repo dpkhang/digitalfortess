@@ -1,0 +1,12 @@
+.staging:
+  variables:
+    SSH_KEY: "$GLOBAL_STAGING_SSH_KEY"
+    SSH_CMD: "$GLOBAL_STAGING_SSH_CMD"
+    WORK_DIR: "$GLOBAL_STAGING_WORK_DIR/$CI_PROJECT_PATH"
+    COMPOSE_FILE: "docker-compose.staging.yml"
+    TARGET_BRANCH: "staging"
+  rules:
+    - if: $CI_COMMIT_REF_PROTECTED != "true"
+      when: never
+    - if: $GLOBAL_STAGING_SSH_KEY == null || $GLOBAL_STAGING_SSH_CMD == null
+      when: never

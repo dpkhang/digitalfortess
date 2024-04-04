@@ -1,0 +1,74 @@
+.ssh_job:
+  before_script:
+    - "which ssh-agent || ( apt-get update -y && apt-get install openssh-client git -y )"
+    - eval $(ssh-agent -s)
+    - echo "$SSH_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    # prettier-ignore
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - chmod 700 ~/.ssh
+
+.apply:
+  stage: deploy
+  variables:
+    SSH_KEY: ""
+    SSH_CMD: ""
+    WORK_DIR: ""
+    COMPOSE_FILE: ""
+  before_script:
+    - !reference [.ssh_job, before_script]
+  script:
+    # Create target directory if it doesn't exists
+    - $SSH_CMD "mkdir -p $WORK_DIR"
+    # Apply docker-compose.yml changes
+    - $SSH_CMD "cat > $WORK_DIR/docker-compose.yml && exit" < $COMPOSE_FILE
+
+.deploy:
+  stage: deploy
+  variables:
+    SSH_KEY: ""
+    SSH_CMD: ""
+    WORK_DIR: ""
+    COMPOSE_FILE: ""
+  before_script:
+    - !reference [.ssh_job, before_script]
+  script:
+    - echo "Deploy to $WORK_DIR"
+    # prettier-ignore
+    - >-
+      $SSH_CMD [[ -f $WORK_DIR/docker-compose.yml ]]
+      && $SSH_CMD "cd $WORK_DIR && docker compose pull && docker compose up -d && exit"
+      || (echo "docker-compose.yml not found at [$WORK_DIR], cancel deployment." && exit 1)
+
+.shutdown:
+  stage: deploy
+  variables:
+    SSH_KEY: ""
+    SSH_CMD: ""
+    WORK_DIR: ""
+    GIT_STRATEGY: none
+  before_script:
+    - !reference [.ssh_job, before_script]
+  script: $SSH_CMD "cd $WORK_DIR && docker compose down && touch service_is_down && exit"
+  when: manual
+  allow_failure: true
+
+.merge:
+  stage: deploy
+  variables:
+    SSH_KEY: ""
+    TARGET_BRANCH: ""
+  before_script:
+    - !reference [.ssh_job, before_script]
+  script:
+    - git config user.name "$GITLAB_USER_LOGIN"
+    - git config user.email "$GITLAB_USER_EMAIL"
+    - git remote set-url origin $GLOBAL_SSH_REPO/$CI_PROJECT_PATH
+    - git fetch
+    - git config --list
+    - echo "Start merge [$CI_COMMIT_BRANCH] to [$TARGET_BRANCH]"
+    - git checkout $TARGET_BRANCH
+    - git merge origin/$CI_COMMIT_BRANCH
+    - git push origin $TARGET_BRANCH
+  when: manual
+  allow_failure: true

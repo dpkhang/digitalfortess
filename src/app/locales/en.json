@@ -1,0 +1,14 @@
+{
+  "LoginForm": {
+    "login": "Login",
+    "password": "Password",
+    "enter_pass": "Enter your password",
+    "enter_email": "Enter your email"
+  },
+  "HomePage": {
+    "title": ""
+  },
+  "LocaleSwitcher": {
+    "locale": "en"
+  }
+}
